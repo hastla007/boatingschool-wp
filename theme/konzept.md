@@ -1059,4 +1059,71 @@ Wer gibt Steuerklassifizierung und Rechnungslogik für EU/CH frei, und wer ist i
 
 Die Preisbeträge müssen diese Runde nicht blockieren. Der Shop kann mit Preisfeldern, Steuerregeln, Mengenstaffeln und Marktlisten vorbereitet werden; vor Liveverkauf müssen die tatsächlichen Werte und Freigaben eingetragen sein.
 
+
+Gesamtkonzept | App Bootsschule B2B
+
+23. Kontensynchronisierung und Zustell-Fallback
+
+Dieser Abschnitt konkretisiert die zuletzt abgestimmten Zustell- und Kontenregeln. Pro Bestellung wird genau ein Haupt-Zustellweg gewählt. Ein automatischer Ersatzweg darf erst nach einem bestätigten Fehler eingesetzt werden und muss dem Käufer beim Kauf transparent angekündigt sein. Sämtliche Zustellversuche beziehen sich auf denselben Code-Batch.
+
+Ein Hauptweg je Bestellung
+
+Haupt-Zustellweg
+
+Ergebnis bei Erfolg
+
+Vorgeschlagener Ersatz
+
+WooCommerce-Kundenkonto
+
+Geschützter Downloadlink zur bestellungsspezifischen ZIP-Datei.
+
+E-Mail-Link an verifizierte Adresse, falls beim Checkout als Fallback erlaubt.
+
+E-Mail-Link
+
+E-Mail enthält einen geschützten, befristeten Link zur ZIP-Datei.
+
+Download im WooCommerce-Konto, sofern Konto vorhanden und Käufer darüber informiert werden kann.
+
+Bootsschulplattform-Konto
+
+Ungenutzter Code-Bestand wird dem verknüpften Schuladmin-Tenant zugeordnet.
+
+Downloadlink oder E-Mail-Link nur nach ausdrücklicher Zustimmung; sonst Supportfall.
+
+Fehlerbehandlung und Wiederholung
+
+Vor einem Wiederholungsversuch wird zuerst der Status der ursprünglichen App-Anfrage abgefragt. Ein Timeout gilt nicht als Beweis, dass die Code-Erzeugung fehlgeschlagen ist.
+
+Vorläufiger Vorschlag: drei Wiederholungsversuche mit wachsendem Abstand. Danach erhält die Bestellung den Status „Zustellung offen“ oder „Zustellfehler“ und der Shopadmin wird informiert.
+
+Ein Fallback ist nur nach bestätigtem Fehlschlag und entsprechend der beim Kauf angezeigten Ersatzregel erlaubt. Es entstehen keine neuen Codes.
+
+Jeder Kanal hat eigenen Status und Zeitstempel. Ein erfolgreicher Kanal darf nicht durch einen Fehler des zweiten Versands rückgängig gemacht werden.
+
+Downloadzugriff als Startvorschlag: 90 Tage und bis zu fünf Downloads; danach kann ein berechtigter Admin denselben Batch nach Prüfung erneut freigeben.
+
+Konten und führende Systeme
+
+WooCommerce darf Shopkonten bei Registrierung anlegen. Der Abgleich mit der Bootsschulplattform erfordert jedoch einen eigenen Connector und App-API-Funktionen. Die App bleibt führend für Schule/Tenant, App-Identität und Codebestand. WooCommerce ist führend für Shopkonto, Bestellungen, Zahlung und Rechnungsdaten. Ein Shopkonto allein erzeugt noch keine freigegebene Schule.
+
+Registrierung in WooCommerce: Shopkonto wird erstellt; die App erhält über den Server-Connector eine Anlage- oder Verknüpfungsanfrage. Ein bestehender Tenant wird über einen kurzlebigen Bestätigungscode verknüpft. Neue Schulen bleiben bis zur B2B-Prüfung im ausstehenden Status.
+
+Schulanlage durch den Superadmin in der App: Die App stößt idempotent die Anlage eines WooCommerce-Kundenkontos an. Der Shopadmin erhält einen Passwort-Einrichtungslink; Passwörter werden nicht zwischen den Systemen synchronisiert.
+
+Verknüpfung über stabile App-Tenant-ID und WooCommerce-Kunden-ID; nicht allein über eine passende E-Mail-Adresse. Konflikte und doppelte E-Mails werden zur Prüfung markiert.
+
+Bootsschul-Kunden erhalten eine begrenzte Shop-Kundenrolle. WordPress-Administratorrechte bleiben beim Shopbetreiber.
+
+Vor Entwicklung noch zu bestätigen
+
+Ersatzweg je Hauptweg und nötige Zustimmung im Checkout.
+
+Ob neu registrierte Shopkunden sofort App-Nutzer werden oder erst nach verifizierter E-Mail und Schulprüfung.
+
+Vorgeschlagene Downloadfrist von 90 Tagen und fünf Downloads.
+
+Wer Sync- und Zustellfehler bearbeitet und welche Benachrichtigungen Käufer sowie Shopadmin erhalten.
+
 Gesamtkonzept | App Bootsschule B2B
